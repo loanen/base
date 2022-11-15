@@ -1,0 +1,187 @@
+function sandbox(var,func)
+	local env = getfenv(func)
+	local newenv = setmetatable({},{
+		__index = function(self,k)
+			if k=="script" then
+				return var
+			else
+				return env[k]
+			end
+		end,
+	})
+	setfenv(func,newenv)
+	return func
+end
+cors = {}
+mas = Instance.new("Model",game:GetService("Lighting"))
+ScreenGui0 = Instance.new("ScreenGui")
+Frame1 = Instance.new("Frame")
+TextLabel2 = Instance.new("TextLabel")
+TextBox3 = Instance.new("TextBox")
+TextButton4 = Instance.new("TextButton")
+LocalScript5 = Instance.new("LocalScript")
+TextBox6 = Instance.new("TextBox")
+LocalScript7 = Instance.new("LocalScript")
+LocalScript8 = Instance.new("LocalScript")
+ImageLabel9 = Instance.new("ImageLabel")
+LocalScript10 = Instance.new("LocalScript")
+ScreenGui0.Name = "bruhshe"
+ScreenGui0.Parent = game.CoreGui
+ScreenGui0.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Frame1.Name = "MainKeyFrame"
+Frame1.Parent = ScreenGui0
+Frame1.Position = UDim2.new(0.419270843, 0, 0.428703696, 0)
+Frame1.Size = UDim2.new(0.160937503, 0, 0.141666666, 0)
+Frame1.BackgroundColor = BrickColor.new("Black")
+Frame1.BackgroundColor3 = Color3.new(0.164706, 0.164706, 0.164706)
+Frame1.LayoutOrder = 1
+TextLabel2.Name = "Title"
+TextLabel2.Parent = Frame1
+TextLabel2.Size = UDim2.new(1, 0, 0.104575165, 0)
+TextLabel2.BackgroundColor = BrickColor.new("Institutional white")
+TextLabel2.BackgroundColor3 = Color3.new(1, 1, 1)
+TextLabel2.BackgroundTransparency = 1
+TextLabel2.Font = Enum.Font.Gotham
+TextLabel2.FontSize = Enum.FontSize.Size14
+TextLabel2.Text = "MAMBA HUB | Key Systen"
+TextLabel2.TextColor = BrickColor.new("Silver flip/flop")
+TextLabel2.TextColor3 = Color3.new(0.54902, 0.54902, 0.54902)
+TextLabel2.TextScaled = true
+TextLabel2.TextSize = 14
+TextLabel2.TextWrap = true
+TextLabel2.TextWrapped = true
+TextBox3.Name = "PutKey"
+TextBox3.Parent = Frame1
+TextBox3.Position = UDim2.new(0.174757272, 0, 0.435532123, 0)
+TextBox3.Size = UDim2.new(0.647249162, 0, 0.130718961, 0)
+TextBox3.BackgroundColor = BrickColor.new("Medium brown")
+TextBox3.BackgroundColor3 = Color3.new(0.239216, 0.239216, 0.239216)
+TextBox3.BorderSizePixel = 0
+TextBox3.Font = Enum.Font.SourceSans
+TextBox3.FontSize = Enum.FontSize.Size14
+TextBox3.Text = "..."
+TextBox3.TextColor = BrickColor.new("Institutional white")
+TextBox3.TextColor3 = Color3.new(1, 1, 1)
+TextBox3.TextScaled = true
+TextBox3.TextSize = 14
+TextBox3.TextWrap = true
+TextBox3.TextWrapped = true
+TextButton4.Name = "Reddem"
+TextButton4.Parent = Frame1
+TextButton4.Position = UDim2.new(0.239440322, 0, 0.662846982, 0)
+TextButton4.Size = UDim2.new(0.524271846, 0, 0.143790856, 0)
+TextButton4.BackgroundColor = BrickColor.new("Medium brown")
+TextButton4.BackgroundColor3 = Color3.new(0.239216, 0.239216, 0.239216)
+TextButton4.BorderSizePixel = 0
+TextButton4.Font = Enum.Font.Gotham
+TextButton4.FontSize = Enum.FontSize.Size14
+TextButton4.Text = "Redeem"
+TextButton4.TextColor = BrickColor.new("Institutional white")
+TextButton4.TextColor3 = Color3.new(1, 1, 1)
+TextButton4.TextScaled = true
+TextButton4.TextSize = 14
+TextButton4.TextWrap = true
+TextButton4.TextWrapped = true
+LocalScript5.Parent = TextButton4
+table.insert(cors,sandbox(LocalScript5,function()
+local activationkey = "xL95bhVZWDfDanD"
+local key = script.Parent.Parent.PutKey
+local redeem = script.Parent
+
+redeem.MouseButton1Click:Connect(function()
+	if key.Text == activationkey then
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/loanen/base/main/mainscript'))()
+		script.Parent.Parent.Parent:Destroy()
+	elseif key.Text ~= activationkey then
+		redeem.BackgroundColor3 = Color3.new(0.227451, 0, 0)
+		redeem.Text = 'Invalid Key'
+		wait(1)
+		redeem.BackgroundColor3 = Color3.new(0.239216, 0.239216, 0.239216)
+		redeem.Text = 'Redeem'
+	end
+end)
+
+--loadstring(game:HttpGet('https://raw.githubusercontent.com/m4mbaleila/mambahub/main/%3F%26sheesh'))()
+end))
+TextBox6.Name = "Discord"
+TextBox6.Parent = Frame1
+TextBox6.Position = UDim2.new(0, 0, 0.911382914, 0)
+TextBox6.Size = UDim2.new(1, 0, 0.0849673226, 0)
+TextBox6.BackgroundColor = BrickColor.new("Institutional white")
+TextBox6.BackgroundColor3 = Color3.new(1, 1, 1)
+TextBox6.BackgroundTransparency = 1
+TextBox6.Font = Enum.Font.SourceSans
+TextBox6.FontSize = Enum.FontSize.Size14
+TextBox6.Text = ""
+TextBox6.TextColor = BrickColor.new("Dark stone grey")
+TextBox6.TextColor3 = Color3.new(0.388235, 0.388235, 0.388235)
+TextBox6.TextScaled = true
+TextBox6.TextSize = 14
+TextBox6.TextWrap = true
+TextBox6.TextWrapped = true
+LocalScript7.Parent = TextBox6
+table.insert(cors,sandbox(LocalScript7,function()
+script.Parent.ClearTextOnFocus = false
+end))
+LocalScript8.Parent = Frame1
+table.insert(cors,sandbox(LocalScript8,function()
+local UIS = game:GetService('UserInputService')
+local frame = script.Parent
+local dragToggle = nil
+local dragSpeed = 0.15
+local dragStart = nil
+local startPos = nil
+
+local function updateInput(input)
+	local delta = input.Position - dragStart
+	local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+		startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = position}):Play()
+end
+
+frame.InputBegan:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+		dragToggle = true
+		dragStart = input.Position
+		startPos = frame.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragToggle = false
+			end
+		end)
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		if dragToggle then
+			updateInput(input)
+		end
+	end
+end)
+end))
+ImageLabel9.Name = "idk"
+ImageLabel9.Parent = Frame1
+ImageLabel9.Position = UDim2.new(-0.0355987065, 0, 0.215602294, 0)
+ImageLabel9.Size = UDim2.new(0.271844655, 0, 0.784313738, 0)
+ImageLabel9.BackgroundColor = BrickColor.new("Institutional white")
+ImageLabel9.BackgroundColor3 = Color3.new(1, 1, 1)
+ImageLabel9.BackgroundTransparency = 1
+ImageLabel9.BorderColor3 = Color3.new(0.105882, 0.164706, 0.207843)
+ImageLabel9.Image = "rbxassetid://11451415208"
+LocalScript10.Parent = ScreenGui0
+table.insert(cors,sandbox(LocalScript10,function()
+local discord = script.Parent.MainKeyFrame.Discord
+
+discord.Text = 'discord.gg/HMFJrBqS'
+end))
+for i,v in pairs(mas:GetChildren()) do
+	v.Parent = game:GetService("Players").LocalPlayer.PlayerGui
+	pcall(function() v:MakeJoints() end)
+end
+mas:Destroy()
+for i,v in pairs(cors) do
+	spawn(function()
+		pcall(v)
+	end)
+end
