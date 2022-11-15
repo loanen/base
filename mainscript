@@ -1,0 +1,1019 @@
+local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/Vape.txt")()
+
+-- Prison Life
+if game.PlaceId == 155615604 then
+	local PRLwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local PRLMainTab = PRLwin:Tab("Main")
+	local PRLGunsTab = PRLwin:Tab('Guns')
+
+	PRLMainTab:Slider("WalkSpeed",16,250,0, function(t)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+	end)
+
+	PRLMainTab:Slider("JumpPower",50,200,0, function(t)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = t
+	end)
+
+	PRLMainTab:Toggle("Kill All",false, function(t)
+		while t do
+            for i, v in next, game:GetService("Players"):GetChildren() do
+            pcall(function()
+            if v~= game:GetService("Players").LocalPlayer and not v.Character:FindFirstChildOfClass("ForceField") and v.Character.Humanoid.Health > 0 then
+            while v.Character:WaitForChild("Humanoid").Health > 0 do
+            wait();
+            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame;
+            for x, c in next, game:GetService("Players"):GetChildren() do
+            if c ~= game:GetService("Players").LocalPlayer then game.ReplicatedStorage.meleeEvent:FireServer(c) end
+            end
+            end
+            end
+            end)
+            wait()
+            end
+        end
+	end)
+
+	PRLGunsTab:Dropdown("Give Guns",{"M9","AK-47","Remington 870"}, function(t)
+		local A_1 = game:GetService("Workspace")["Prison_ITEMS"].giver[t].ITEMPICKUP
+    	local Event = game:GetService("Workspace").Remote.ItemHandler
+    	Event:InvokeServer(A_1)
+	end)
+
+	PRLGunsTab:Button("OP GUN", function()
+		lib:Notification("Notification", "Equip gun before pressing this button", "Ok")
+		local player = game:GetService("Players").LocalPlayer; local char = player.Character
+		local gun = char:FindFirstChildOfClass("Tool")
+		local g = require(gun:FindFirstChild("GunStates"))
+
+		g.Damage = 100 -- Damage per bullet
+		g.MaxAmmo = math.huge -- just keep this at math.huge
+		g.CurrentAmmo = math.huge -- just keep this at math.huge
+		g.StoredAmmo = math.huge -- just keep this at math.huge
+		g.FireRate = 0.01 -- 1 = slow fire time (1 second), 0.01 = very fast fire time (.01 second)
+		g.AutoFire = true -- true = automatic / false = semiautomatic
+		g.Range = math.huge -- The distance your bullets can travel
+		g.Spread = 0 -- Bullet spread, 0 = no spread, 10 = lol, spread
+		g.ReloadTime = 0 -- Seconds it takes to relaod
+		g.Bullets = 25 -- Bullets per shot
+	end)
+
+-- DOORS
+elseif game.PlaceId == 6839171747 then
+	local DORwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local notifications = loadstring(game:HttpGet(("https://raw.githubusercontent.com/AbstractPoo/Main/main/Notifications.lua"),true))()
+    local keyrange, leverrange, lockpickrange, bookrange, bandagerange, lighterrange, flashlightrange = 15, 15, 15, 15, 15, 15, 15
+    local bullshittable = {KeyObtain = {}, LeverForGate = {},LiveHintBook = {}}
+    local prompttable = {"KeyObtain", "LeverForGate", "LiveHintBook",}
+	local DORMainTab = DORwin:Tab("Main")
+	local DORVisualTab = DORwin:Tab("Visual")
+	local DORESPTab = DORwin:Tab("ESP")
+	local DORPlayerTab = DORwin:Tab("Player")
+
+	task.spawn(function()
+		game.Workspace.ChildAdded:Connect(function(v)
+			if v:IsA("Model") then
+				notifications:notify{
+					Title = "â ï¸Monster Spawnedâ ï¸",
+					Description = v.Name.. " spawned!",
+					Accept = {
+						Text = "OK"
+					},
+					Length = 5
+				}
+				task.wait(5)
+			end
+		end)
+	end)
+
+	local function outline(dad)
+		local esp = Instance.new("Highlight")
+		esp.Name = "Outline"
+		esp.FillTransparency = 1
+		esp.FillColor = Color3.new(1, 0.666667, 0)
+		esp.OutlineColor = Color3.new(255,0,0)
+		esp.OutlineTransparency = 0
+		esp.Parent = dad
+	end
+	
+	function getbullshit()
+		local function getname(a)
+			return bullshittable[a.Parent.Name]
+		end
+	
+		local function checkifstillthere(a)
+			for _,v in pairs(a) do
+				if v.Parent == nil then
+					table.remove(a, i)
+				end
+			end
+		end
+	
+		while task.wait(1) do
+			for _,v in pairs(game:GetService("Workspace").CurrentRooms:GetDescendants()) do 
+				if v:IsA("ProximityPrompt") and table.find(prompttable, v.Parent.Name) then
+					 table.insert(getname(v), v)
+				end
+			end
+	
+			for _,v in pairs(bullshittable) do
+				checkifstillthere(v)
+			end
+		end
+	end
+	coroutine.wrap(getbullshit)()
+
+	local pickupaura
+	DORMainTab:Toggle("Key Aura",false, function(t)
+		pickupaura = t
+    repeat task.wait(.5)
+        for _,v in pairs(bullshittable.KeyObtain) do
+            pcall(function()
+                local mag = (lplr.Character.HumanoidRootPart.Position - v.Parent.Hitbox.Position).magnitude
+                if mag < keyrange then 
+                    fireproximityprompt(v)
+                end
+            end)
+		end
+    until not pickupaura 
+	end)
+
+	DORMainTab:Slider("Key Aura Range",0,15,0, function(t)
+		keyrange = t
+	end)
+
+	local leveraura
+	DORMainTab:Toggle("Lever Aura",false, function(t)
+		leveraura = t
+    repeat task.wait(.5)
+        for _,v in pairs(bullshittable.LeverForGate) do
+            pcall(function()
+                local mag = (lplr.Character.HumanoidRootPart.Position - v.Parent.Main.Position).magnitude
+                if mag < leverrange then 
+                    fireproximityprompt(v)
+                end
+            end)
+		end
+    until not leveraura
+	end)
+
+	DORMainTab:Slider("Lever Aura Range",0,15,0, function(t)
+		leverrange = t
+	end)
+
+	local bookaura
+	DORMainTab:Toggle("Book Aura",false, function(t)
+		bookaura = t
+    repeat task.wait(.5)
+        for _,v in pairs(bullshittable.LiveHintBook) do
+            pcall(function()
+                local mag = (lplr.HumanoidRootPart.Position - v.Parent.Cover2.Position).magnitude
+                if mag < bookrange then 
+                    fireproximityprompt(v)
+                end
+            end)
+		end
+    until not bookaura
+	end)
+
+	DORMainTab:Slider("Book Aura Range",0,15,0, function(t)
+		bookrange = t
+	end)
+
+	DORVisualTab:Toggle("FullBright",false, function(z)
+		if z then
+			game:GetService("Lighting").Brightness = 2
+			game:GetService("Lighting").ClockTime = 14
+			game:GetService("Lighting").FogEnd = 100000
+			game:GetService("Lighting").GlobalShadows = false
+			game:GetService("Lighting").OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+		else
+			game:GetService("Lighting").Brightness = 3
+			game:GetService("Lighting").ClockTime = 20
+			game:GetService("Lighting").FogEnd = 1.1111111533265e+16
+			game:GetService("Lighting").GlobalShadows = true
+			game:GetService("Lighting").OutdoorAmbient = Color3.fromRGB(0.5, 0.5, 0.5)
+		end
+	end)
+
+	local keyesp
+	DORESPTab:Toggle("Key ESP",false, function(t)
+		keyesp = t
+    if keyesp then
+        repeat task.wait(.25)
+            for i,v in pairs(bullshittable.KeyObtain) do
+                pcall(function()
+                    if not v.Parent:FindFirstChild("Outline") then
+                        if keyesp then
+                            outline(v.Parent)
+                        end
+                    end
+                end)
+            end
+        until not keyesp
+    else
+        for i,v in pairs(bullshittable.KeyObtain) do
+            pcall(function()
+                v.Parent.Outline:Destroy()
+            end)
+        end
+	end
+end)
+	local leveresp
+	DORESPTab:Toggle("Lever ESP",false, function(t)
+		leveresp = t
+    if leveresp then
+        repeat task.wait(.25)
+            for i,v in pairs(bullshittable.LeverForGate) do
+                pcall(function()
+                    if not v.Parent:FindFirstChild("Outline") then
+                        if leveresp then
+                            outline(v.Parent)
+                        end
+                    end
+                end)
+            end
+        until not leveresp
+    else
+        for i,v in pairs(bullshittable.LeverForGate) do
+            pcall(function()
+                v.Parent.Outline:Destroy()
+            end)
+        end
+    end
+end)
+	local bookesp
+	DORESPTab:Toggle("Book ESP",false, function(t)
+		bookesp = t
+    if bookesp then
+        repeat task.wait(.25)
+            for i,v in pairs(bullshittable.LiveHintBook) do
+                pcall(function()
+                    if not v.Parent:FindFirstChild("Outline") then
+                        if bookesp then
+                            outline(v.Parent)
+                        end
+                    end
+                end)
+            end
+        until not bookesp
+    else
+        for i,v in pairs(bullshittable.LiveHintBook) do
+            pcall(function()
+                v.Parent.Outline:Destroy()
+            end)
+        end
+    end
+end)
+	DORPlayerTab:Toggle("Toggle WalkSpeed",false, function(t)
+		getgenv().wstog = t
+	end)
+
+	DORPlayerTab:Slider("WalkSpeed",16,45,16, function(t)
+		getgenv().ws = t
+	end)
+
+	task.spawn(function()
+		while task.wait() do
+			if getgenv().wstog then
+				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().ws
+			end
+		end
+	end
+)
+
+-- Main Clicker Simulator
+elseif game.PlaceId == 11142132921 then
+	local MCSSwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local MCSSPlayerTab = MCSSwin:Tab("Player")
+	local MCSSFarmTab = MCSSwin:Tab("Auto Farm")
+	local MCSSFEHTab = MCSSwin:Tab("Eggs")
+	local MCSSWorldTab = MCSSwin:Tab("World")
+	local MegaClickEvent = game:GetService("ReplicatedStorage").MegaClicks
+	local megaacen = false
+	local snowao = false
+	local goldfarmao = false
+	local goldenao = false
+	local goldao = false
+	local emeraldao = false
+	local diamondao = false
+	local farmerao = false
+	local commonao = false
+	local autoconverten = false
+	local price = 0
+	local opegtimes = 'Single'
+	local fd = 'FirDoor'
+	local sd = 'SecndDoor'
+	local td = 'ThiDoor'
+	local value = 'Gems'
+	local loc = game.Players.LocalPlayer
+	local annoying = {"fadasalike", "Nextinel2008"} 
+	--local antiadminname = {'Dridles', 'LUTIYDIMASPIDARAS'}
+	local openeggevent = game:GetService("ReplicatedStorage").ServerEvents.hatchEgg
+	local conevtevent = game:GetService("ReplicatedStorage").Convert5
+	local snowegg = game:GetService("Workspace").gameEggs.SnowEgg
+	local goldfarmegg = game:GetService("Workspace").gameEggs.GoldenFarmerEgg
+	local goldenegg = game:GetService("Workspace").gameEggs.GoldenEgg
+	local godlyegg = game:GetService("Workspace").gameEggs.GodlyEgg
+	local farmeregg = game:GetService("Workspace").gameEggs.FarmerEgg
+	local emeraldegg = game:GetService("Workspace").gameEggs.EmeraldEgg
+	local diamondegg = game:GetService("Workspace").gameEggs.DiamondEgg
+	local commonegg = game:GetService("Workspace").gameEggs.CommonEgg
+	local buydoorevent = game:GetService("ReplicatedStorage").DoorEvents.Buy
+
+	game.Players.PlayerAdded:Connect(function(plr)
+		for i, v in pairs(annoying) do
+			if plr.Name == v then
+				loc:Kick("MAMBA HUB Anti Admin | You were kicked because the admin joined the server")
+			end
+		end
+	end)
+
+	MCSSPlayerTab:Slider("WalkSpeed",16,300,16, function(t)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+	end)
+	
+	MCSSFarmTab:Toggle("Mega Auto Clicker",false, function(t)
+		megaacen = t
+		if megaacen == true then
+			while wait(0.01) do
+				MegaClickEvent:FireServer()
+				if megaacen == false then
+					break
+				end
+			end
+		end
+	end)
+
+	MCSSFarmTab:Toggle("Auto Convert Gems 15k",false, function(t)
+		autoconverten = t
+		if autoconverten == true then
+			while wait(0.01) do
+				conevtevent:FireServer()
+				if autoconverten == false then
+					break
+				end
+			end
+		end
+	end)
+
+	MCSSFEHTab:Toggle("Auto Open Snow Egg",false, function(t)
+		snowao = t
+		if snowao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, snowegg, 'Single')
+				if snowao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Free Auto Open Golden Farmer Egg",false, function(t)
+		goldfarmao = t
+		if goldfarmao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, goldfarmegg, 'Single')
+				if goldfarmao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Free Auto Open Golden Egg",false, function(t)
+		goldenao = t
+		if goldenao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, goldenegg, 'Single')
+				if goldenao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Free Auto Open Godly Egg",false, function(t)
+		goldao = t
+		if goldao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, godlyegg, 'Single')
+				if goldao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Free Auto Open Farmer Egg",false, function(t)
+		farmerao = t
+		if farmerao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, farmeregg, 'Single')
+				if farmerao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Free Auto Open Emerald Egg",false, function(t)
+		emeraldao = t
+		if emeraldao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, emeraldegg, 'Single')
+				if emeraldao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Free Auto Open Diamond Egg",false, function(t)
+		diamondao = t
+		if diamondao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, diamondegg, 'Single')
+				if diamondao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Free Auto Open Common Egg",false, function(t)
+		commonao = t
+		if commonao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, commonegg, 'Single')
+				if commonao == false then
+					break
+				end
+			end
+		end
+	end)
+
+	MCSSWorldTab:Button("Buy 1 Door for FREE", function()
+		buydoorevent:FireServer(fd, value, price)
+	end)
+	MCSSWorldTab:Button("Buy 2 Door for FREE", function()
+		buydoorevent:FireServer(sd, value, price)
+	end)
+	MCSSWorldTab:Button("Buy 3 Door for FREE", function()
+		buydoorevent:FireServer(td, value, price)
+	end)
+
+-- Skala Simulator
+elseif game.PlaceId == 10972284553 then
+	local SKSIMwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local SKSIMAutoTab = SKSIMwin:Tab("Auto Farm")
+	local SKSIMUpgTab = SKSIMwin:Tab("Upgrades")
+	local SKSIMVisualTab = SKSIMwin:Tab("Visual")
+	local mainclickup = game:GetService("Players").LocalPlayer.PlayerGui.GameGui.Upgrade
+	local megaclickup = game:GetService("Players").LocalPlayer.PlayerGui.GameGui.Mega
+	local macenabled = false
+	local megaacenabled = false
+	local trurtlesspamenabled = false
+	local autoupgradeenabled = false
+	local megaautoupgradeenabled = false
+	local selectedturtle = nil
+	local price = 0
+
+	SKSIMAutoTab:Toggle("Auto Clicker",false, function(t)
+		macenabled = t
+		local Event = game:GetService("ReplicatedStorage").Click
+		if macenabled == true then
+		while wait(0.01) do
+			Event:FireServer()
+			if macenabled == false then
+				break
+			end
+		end
+	end
+end)
+	SKSIMAutoTab:Toggle("Mega Auto Clicker",false, function(t)
+		megaacenabled = t
+		local Event = game:GetService("ReplicatedStorage").MegaClick
+		if megaacenabled == true then
+		while wait(0.1) do
+			Event:FireServer()
+			if megaacenabled == false then
+				break
+			end
+		end
+	end
+end)
+	SKSIMAutoTab:Toggle("Auto Buy Turtle",false, function(t)
+		trurtlesspamenabled = t
+		local Event = game:GetService("ReplicatedStorage").IncomeEvent
+		if trurtlesspamenabled == true then
+		while wait(0.1) do
+			Event:FireServer(selectedturtle, price)
+			if trurtlesspamenabled == false then
+				break
+			end
+		end
+	end
+end)
+	SKSIMAutoTab:Dropdown("Select Turtle",{1,2,3}, function(t)
+		selectedturtle = t
+	end
+)
+	SKSIMUpgTab:Toggle("Auto Upgrade Skala",false, function(t)
+		autoupgradeenabled = t
+		local Event = game:GetService("ReplicatedStorage").ClickUpgrade
+		if autoupgradeenabled == true then
+		while wait(0.1) do
+			Event:FireServer(mainclickup)
+			if autoupgradeenabled == false then
+				break
+			end
+		end
+	end
+end)
+	SKSIMUpgTab:Toggle("Auto Upgrade Mega Click",false, function(t)
+		megaautoupgradeenabled = t
+		local Event = game:GetService("ReplicatedStorage").ClickUpgrade2
+		if megaautoupgradeenabled == true then
+		while wait(0.1) do
+			Event:FireServer(megaclickup)
+			if megaautoupgradeenabled == false then
+				break
+			end
+		end
+	end
+end)
+	SKSIMVisualTab:Button("Remove Skala", function()
+		game.Workspace.Skala:Destroy()
+	end
+)
+
+-- Cheese Escape
+elseif game.PlaceId == 5777099015 then
+	local CHESESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+	local CHESwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local CHESMainTab = CHESwin:Tab("Main")
+	local CHESEspTab = CHESwin:Tab('ESP')
+	local CHESVisualTab = CHESwin:Tab('Visual')
+	CHESMainTab:Slider("WalkSpeed",16,200,0, function(t)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+	end)
+	CHESMainTab:Slider("JumpPower",50,250,0, function(t)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = t
+	end)
+	CHESMainTab:Button("Give 1 Cheese", function()
+		local Event = game:GetService("ReplicatedStorage").AddCheese
+    	Event:FireServer()
+	end)
+	CHESEspTab:Label("ESP for Cheese Escape is not ready yet.")
+	CHESVisualTab:Button("FullBright", function()
+		loadstring(game:HttpGet("https://pastebin.com/raw/06iG6YkU", true))()
+	end)
+	
+-- JailBreak
+elseif game.PlaceId == 606849621 then
+	local JBwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local JBMainTab = JBwin:Tab("Main")
+	local JBGunTab = JBwin:Tab('Guns')
+
+	JBMainTab:Button("InfJump", function()
+		local Player = game:GetService'Players'.LocalPlayer;
+	local UIS = game:GetService'UserInputService';
+
+	function Action(Object, Function) if Object ~= nil then Function(Object); end end
+
+	UIS.InputBegan:connect(function(UserInput)
+		if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.Space then
+			Action(Player.Character.Humanoid, function(self)
+				if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
+					Action(self.Parent.HumanoidRootPart, function(self)
+						self.Velocity = Vector3.new(0, _G.JumpHeight, 0);
+					end)
+				end
+			end)
+		end
+	end)
+	end)
+
+	JBMainTab:Toggle("WalkSpeed",false, function(t)
+		_G.WalkSpeed = t;
+	_G.Speed = 70;
+
+	local mt = getrawmetatable(game)
+	local old = mt.__newindex
+	setreadonly(mt, false)
+
+	mt.__newindex = newcclosure(function(t,k,v)
+		pcall(function()
+			if t == game:GetService("Players").LocalPlayer.Character.Humanoid and k == "WalkSpeed" and _G.WalkSpeed then
+				v = _G.Speed;
+			end
+		end)
+		return old(t,k,v)
+	end)
+	end)
+
+	JBMainTab:Slider("JumpPower",50,250,50, function(v)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
+	end)
+
+	JBMainTab:Button("Give Keycard (THE ITEM WILL BE INVISIBLE)", function()
+		if not getgenv().MTAPIMutex then loadstring(game:HttpGet("https://raw.githubusercontent.com/KikoTheDon/MT-Api-v2/main/__source/mt-api%20v2.lua", true))() end
+		game.Players.LocalPlayer.TeamValue:AddGetHook("Value", "Police")
+	end)
+	JBGunTab:Button("Give All Guns", function()
+	for i=1,7 do
+			wait(.02)
+			game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(11.8937483, 19.668396, -1723.76379) + Vector3.new(1,0,0)
+			end
+			wait(0.05)
+			local UI = require(game:GetService("ReplicatedStorage").Module:WaitForChild("UI"));
+			for i,v in pairs (UI.CircleAction.Specs) do
+			if v.Name == "Grab" then
+			v:Callback(v, true)
+			end
+			end
+			wait(0.1)
+			for i=1,7 do
+			wait(.02)
+			game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(788.144226, 20.6668549, -148.559204) + Vector3.new(1,0,0)
+			end
+			wait(0.05)
+			local UI = require(game:GetService("ReplicatedStorage").Module:WaitForChild("UI"));
+			for i,v in pairs (UI.CircleAction.Specs) do
+			if v.Name == "Grab" then
+			v:Callback(v, true)
+			end
+			end
+			wait(0.1)
+			for i=1,7 do
+			wait(.02)
+			game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-309.690399, 19.3684883, 288.376099) + Vector3.new(1,0,0)
+			end
+			wait(0.05)
+			local UI = require(game:GetService("ReplicatedStorage").Module:WaitForChild("UI"));
+			for i,v in pairs (UI.CircleAction.Specs) do
+			if v.Name == "Grab" then
+			v:Callback(v, true)
+			end
+			end
+	end)
+
+	JBGunTab:Button("Gun Mods", function()
+		for i,v in pairs(game:GetService("ReplicatedStorage").Game.ItemConfig:GetChildren()) do
+			local a = require(v)
+			a.MagSize = math.huge
+			a.CamShakeMagnitude = 0
+			a.FireAuto = true
+			a.FireFreq = 100
+			end
+	end)
+
+	local JBModsTab = JBwin:Tab('Main Mods')
+	JBModsTab:Button("Inf Nitro", function()
+		local mouse = game:GetService('Players').LocalPlayer:GetMouse()
+
+		local function hotkeyHandler(key)
+		if (key == 'q') then
+			for _, v in next, getgc(true) do
+			if (type(v) == 'table' and rawget(v, 'Nitro')) then
+				v.Nitro = 250
+			end
+			end
+		end
+		end
+		
+		mouse.KeyDown:connect(hotkeyHandler)
+		end)
+		
+	JBModsTab:Button("Inf Jetpack Fuel", function()
+		for _, v in next, getgc(true) do
+			if (type(v) == 'table' and rawget(v, 'LocalMaxFuel')) then
+				v.LocalMaxFuel = math.huge
+				v.LocalFuel = math.huge
+				v.LocalFuelType = 'Rocket'
+			end
+		end
+	end)
+
+-- Evade
+elseif game.PlaceId == 9872472334 then
+	local EVDwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local EVDPlayerTab = EVDwin:Tab("Player")
+	local EVDFarmTab = EVDwin:Tab("Auto Farm")
+	local EVDWorldTab = EVDwin:Tab("World")
+	local EVDUtilsTab = EVDwin:Tab("Utils")
+	local EVDESPTab = EVDwin:Tab("ESP")
+	local WorkspacePlayers = game:GetService("Workspace").Game.Players;
+    local Players = game:GetService('Players');
+    local localplayer = Players.LocalPlayer;
+	local fbenabled = false
+
+    local Esp = loadstring(game:HttpGet("https://raw.githubusercontent.com/9Strew/roblox/main/proc/kiriotesp"))()
+    Esp.Enabled = false
+    Esp.Tracers = false
+    Esp.Boxes = false
+
+    getgenv().Settings = {
+        moneyfarm = false,
+        afkfarm = false,
+        NoCameraShake = false,
+        Downedplayeresp = false,
+        AutoRespawn = false,
+        TicketFarm = false,
+        Speed = 1450,
+        Jump = 3,
+        reviveTime = 3,
+        DownedColor = Color3.fromRGB(255,0,0),
+        PlayerColor = Color3.fromRGB(255,170,0),
+    
+        stats = {
+            TicketFarm = {
+                earned = nil,
+                duration = 0
+            },
+    
+            TokenFarm = {
+                earned = nil,
+                duration = 0
+            }
+    
+        }
+    }
+
+	EVDPlayerTab:Slider("WalkSpeed",1450,12000,1450, function(t)
+		Settings.Speed = t
+	end)
+	EVDPlayerTab:Slider("JumpPower",3,20,3, function(t)
+		Settings.Jump = t
+	end)
+	EVDPlayerTab:Toggle("Auto Respawn",false, function(t)
+		Settings.AutoRespawn = t
+	end)
+	EVDPlayerTab:Button("Respawn", function()
+		game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+	end)
+	EVDWorldTab:Toggle("Full Bright",false, function(t)
+		fbenabled = t
+		if fbenabled == true then
+			Game.Lighting.Brightness = 4
+	    	Game.Lighting.FogEnd = 100000
+	    	Game.Lighting.GlobalShadows = false
+        	Game.Lighting.ClockTime = 12
+		elseif fbenabled == false then
+			Game.Lighting.Brightness = 1
+	    	Game.Lighting.FogEnd = 100000
+	    	Game.Lighting.GlobalShadows = true
+        	Game.Lighting.ClockTime = 22
+		end
+	end)
+	EVDWorldTab:Toggle("No Camera Shake",false, function(t)
+		Settings.NoCameraShake = t
+	end)
+	EVDUtilsTab:Toggle("Fast Revive",false, function(t)
+		if t then
+            workspace.Game.Settings:SetAttribute("ReviveTime", 2.2)
+        else
+            workspace.Game.Settings:SetAttribute("ReviveTime", Settings.reviveTime)
+        end
+	end)
+	EVDFarmTab:Toggle("Ticket Farm",false, function(t)
+		Settings.TicketFarm = t
+	end)
+	EVDFarmTab:Toggle("Money Farm",false, function(t)
+		Settings.moneyfarm = t
+	end)
+	EVDFarmTab:Toggle("AFK Farm",false, function(t)
+		Settings.afkfarm = t
+	end)
+	EVDESPTab:Toggle("Enable ESP",false, function(t)
+		Esp.Enabled = t
+	end)
+	EVDESPTab:Toggle("Bot ESP",false, function(t)
+		Esp.NPCs = t
+	end)
+	EVDESPTab:Toggle("Ticket ESP",false, function(t)
+		Esp.TicketEsp = t
+	end)
+	EVDESPTab:Toggle("Downed Players ESP",false, function(t)
+		Settings.Downedplayeresp = t
+	end)
+	EVDESPTab:Toggle("Boxes",false, function(t)
+		Esp.Boxes = t
+	end)
+	EVDESPTab:Toggle("Tracers",false, function(t)
+		Esp.Tracers = t
+	end)
+	EVDESPTab:Toggle("Players",false, function(t)
+		Esp.Players = t
+	end)
+	EVDESPTab:Toggle("Distance",false, function(t)
+		Esp.Distance = t
+	end)
+	EVDESPTab:Colorpicker("Player Color",Color3.fromRGB(255, 170, 0), function(t)
+		Settings.PlayerColor = t
+	end)
+	EVDESPTab:Colorpicker("Downed Player Color",Color3.fromRGB(255, 255, 255), function(t)
+		Settings.DownedColor = t
+	end)
+	local FindAI = function()
+        for _,v in pairs(WorkspacePlayers:GetChildren()) do
+            if not Players:FindFirstChild(v.Name) then
+                return v
+            end
+        end
+    end
+    
+    
+    local GetDownedPlr = function()
+        for i,v in pairs(WorkspacePlayers:GetChildren()) do
+            if v:GetAttribute("Downed") then
+                return v
+            end
+        end
+    end
+    local revive = function()
+        local downedplr = GetDownedPlr()
+        if downedplr ~= nil and downedplr:FindFirstChild('HumanoidRootPart') then
+            task.spawn(function()
+                while task.wait() do
+                    if localplayer.Character then
+                        workspace.Game.Settings:SetAttribute("ReviveTime", 2.2)
+                        localplayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 3, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
+                        task.wait()
+                        game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), false)
+                        task.wait(4.5)
+                        game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                        game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                        game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                        break
+                    end
+                end
+            end)
+        end
+    end
+    Esp:AddObjectListener(WorkspacePlayers, {
+        Color =  Color3.fromRGB(255,0,0),
+        Type = "Model",
+        PrimaryPart = function(obj)
+            local hrp = obj:FindFirstChild('HRP')
+            while not hrp do
+                wait()
+                hrp = obj:FindFirstChild('HRP')
+            end
+            return hrp
+        end,
+        Validator = function(obj)
+            return not game.Players:GetPlayerFromCharacter(obj)
+        end,
+        CustomName = function(obj)
+            return '[AI] '..obj.Name
+        end,
+        IsEnabled = "NPCs",
+    })
+    Esp:AddObjectListener(game:GetService("Workspace").Game.Effects.Tickets, {
+        CustomName = "Ticket",
+        Color = Color3.fromRGB(41,180,255),
+        IsEnabled = "TicketEsp"
+    })
+    Esp.Overrides.GetColor = function(char)
+        local GetPlrFromChar = Esp:GetPlrFromChar(char)
+        if GetPlrFromChar then
+            if Settings.Downedplayeresp and GetPlrFromChar.Character:GetAttribute("Downed") then
+                return Settings.DownedColor
+            end
+        end
+        return Settings.PlayerColor
+     end
+     
+     local old
+     old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
+         local Args = {...}
+         local method = getnamecallmethod()
+         if tostring(self) == 'Communicator' and method == "InvokeServer" and Args[1] == "update" then
+             return Settings.Speed, Settings.Jump 
+         end
+         return old(self,...)
+     end))
+     
+     local formatNumber = (function(value) -- //Credits: https://devforum.roblox.com/t/formatting-a-currency-label-to-include-commas/413670/3
+         value = tostring(value)
+         return value:reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
+     end)
+     
+     function Format(Int) -- // Credits: https://devforum.roblox.com/t/converting-secs-to-hsec/146352
+         return string.format("%02i", Int)
+     end
+     
+     function convertToHMS(Seconds)
+         local Minutes = (Seconds - Seconds%60)/60
+         Seconds = Seconds - Minutes*60
+         local Hours = (Minutes - Minutes%60)/60
+         Minutes = Minutes - Hours*60
+         return Format(Hours).."H "..Format(Minutes).."M "..Format(Seconds)..'S'
+     end
+     
+     task.spawn(function()
+         while task.wait(1) do
+             if Settings.TicketFarm then
+                 Settings.stats.TicketFarm.duration += 1
+             end
+             if Settings.moneyfarm then
+                 Settings.stats.TokenFarm.duration += 1
+             end 
+         end
+     end)
+     
+     local gettickets = localplayer:GetAttribute('Tickets')
+     local GetTokens = localplayer:GetAttribute('Tokens')
+     
+     localplayer:GetAttributeChangedSignal('Tickets'):Connect(function()
+         local tickets = tostring(gettickets - localplayer:GetAttribute('Tickets'))
+         local cleanvalue = string.split(tickets, "-")
+         Settings.stats.TicketFarm.earned = cleanvalue[2]
+     end)
+     
+     localplayer:GetAttributeChangedSignal('Tokens'):Connect(function()
+         local tokens = tostring(GetTokens - localplayer:GetAttribute('Tokens'))
+         local cleanvalue = string.split(tokens, "-")
+         print(cleanvalue[2])
+         Settings.stats.TokenFarm.earned = cleanvalue[2]
+     end)
+     
+     localplayer:GetAttributeChangedSignal('Tokens'):Connect(function()
+         local tokens = tostring(GetTokens - localplayer:GetAttribute('Tokens'))
+         local cleanvalue = string.split(tokens, "-")
+         print(cleanvalue[2])
+         Settings.stats.TokenFarm.earned = cleanvalue[2]
+     end)
+     
+     task.spawn(function()
+         while task.wait() do
+             if Settings.TicketFarm then
+                 TypeLabelC5:Set('Ticket Farm')
+                 DurationLabelC5:Set('Duration:'..convertToHMS(Settings.stats.TicketFarm.duration))
+                 EarnedLabelC5:Set('Earned:'.. formatNumber(Settings.stats.TicketFarm.earned))
+                 TicketsLabelC5:Set('Total Tickets: '..localplayer:GetAttribute('Tickets'))
+     
+                 if game.Players.LocalPlayer:GetAttribute('InMenu') ~= true and localplayer:GetAttribute('Dead') ~= true then
+                     for i,v in pairs(game:GetService("Workspace").Game.Effects.Tickets:GetChildren()) do
+                         localplayer.Character.HumanoidRootPart.CFrame = CFrame.new(v:WaitForChild('HumanoidRootPart').Position)
+                     end
+                 else
+                     task.wait(2)
+                     game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                 end
+                 if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
+                     game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                     task.wait(2)
+                 end
+             end
+         end
+     end)
+     
+     
+     task.spawn(function()
+         while task.wait() do
+             if Settings.AutoRespawn then
+                  if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
+                     game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                  end
+             end
+     
+             if Settings.NoCameraShake then
+                 localplayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
+             end
+             if Settings.moneyfarm then
+                 TypeLabelC5:Set('Money Farm')
+                 DurationLabelC5:Set('Duration:'..convertToHMS(Settings.stats.TokenFarm.duration))
+                 EarnedLabelC5:Set('Earned:'.. formatNumber(Settings.stats.TokenFarm.earned))
+                 TicketsLabelC5:Set('Total Tokens: '..formatNumber(localplayer:GetAttribute('Tokens')))
+                 
+                 if localplayer:GetAttribute("InMenu") and localplayer:GetAttribute("Dead") ~= true then
+                     game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                 end
+                 if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
+                     game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                     task.wait(3)
+                 else
+                     revive()
+                     task.wait(1)
+                 end
+     
+             end
+             if Settings.moneyfarm == false and Settings.afkfarm and localplayer.Character:FindFirstChild('HumanoidRootPart') ~= nil then
+                 localplayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(6007, 7005, 8005)
+             end
+         end
+     end)
+     --Infinite yield's Anti afk
+    local GC = getconnections or get_signal_cons
+    if GC then
+        for i,v in pairs(GC(localplayer.Idled)) do
+            if v["Disable"] then
+                v["Disable"](v)
+            elseif v["Disconnect"] then
+                v["Disconnect"](v)
+            end
+        end
+    else
+        localplayer.Idled:Connect(function()
+            local VirtualUser = game:GetService("VirtualUser")
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+	end
+end
+--lib:Notification("Notification", "Hello!", "Hi!")
