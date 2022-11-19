@@ -290,6 +290,8 @@ elseif game.PlaceId == 11142132921 then
 	local MCSSWorldTab = MCSSwin:Tab("World")
 	local MegaClickEvent = game:GetService("ReplicatedStorage").MegaClicks
 	local megaacen = false
+	local sandyepicao = false
+	local sandyao = false
 	local snowao = false
 	local goldfarmao = false
 	local goldenao = false
@@ -304,12 +306,15 @@ elseif game.PlaceId == 11142132921 then
 	local fd = 'FirDoor'
 	local sd = 'SecndDoor'
 	local td = 'ThiDoor'
+	local fod = 'FirdDoor'
 	local value = 'Gems'
 	local loc = game.Players.LocalPlayer
 	local annoying = {"fadasalike", "Nextinel2008"} 
 	--local antiadminname = {'Dridles', 'LUTIYDIMASPIDARAS'}
 	local openeggevent = game:GetService("ReplicatedStorage").ServerEvents.hatchEgg
 	local conevtevent = game:GetService("ReplicatedStorage").Convert5
+	local sandyepegg = game:GetService("Workspace").gameEggs.SandyEggEpic
+	local sandyegg = game:GetService("Workspace").gameEggs.SandyEgg
 	local snowegg = game:GetService("Workspace").gameEggs.SnowEgg
 	local goldfarmegg = game:GetService("Workspace").gameEggs.GoldenFarmerEgg
 	local goldenegg = game:GetService("Workspace").gameEggs.GoldenEgg
@@ -356,6 +361,28 @@ elseif game.PlaceId == 11142132921 then
 		end
 	end)
 
+	MCSSFEHTab:Toggle("Auto Open Sandy Epic Egg",false, function(t)
+		sandyepicao = t
+		if sandyepicao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, sandyepegg, 'Single')
+				if sandyepicao == false then
+					break
+				end
+			end
+		end
+	end)
+	MCSSFEHTab:Toggle("Auto Open Sandy Egg",false, function(t)
+		sandyao = t
+		if sandyao == true then
+			while wait(0.01) do
+				openeggevent:FireServer(0, sandyegg, 'Single')
+				if sandyao == false then
+					break
+				end
+			end
+		end
+	end)
 	MCSSFEHTab:Toggle("Auto Open Snow Egg",false, function(t)
 		snowao = t
 		if snowao == true then
@@ -453,6 +480,9 @@ elseif game.PlaceId == 11142132921 then
 	end)
 	MCSSWorldTab:Button("Buy 3 Door for FREE", function()
 		buydoorevent:FireServer(td, value, price)
+	end)
+	MCSSWorldTab:Button("Buy 4 Door for FREE", function()
+		buydoorevent:FireServer(fod, value, price)
 	end)
 
 -- Skala Simulator
