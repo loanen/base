@@ -336,6 +336,11 @@ elseif game.PlaceId == 11142132921 then
 	MCSSPlayerTab:Slider("WalkSpeed",16,300,16, function(t)
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
 	end)
+
+	MCSSPlayerTab:Button("Become an Admin (Free Gamepasses)", function()
+		game.Players.LocalPlayer.UserId = '1171396365'
+		game.Players.LocalPlayer.Character.Humanoid.Health = 0
+	end)
 	
 	MCSSFarmTab:Toggle("Mega Auto Clicker",false, function(t)
 		megaacen = t
