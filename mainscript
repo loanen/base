@@ -337,7 +337,7 @@ elseif game.PlaceId == 11142132921 then
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
 	end)
 
-	MCSSPlayerTab:Button("increase the number of clicks (click many times)", function()
+	MCSSPlayerTab:Button("MULTIPIE your CLICKS (click many times)", function()
 		game.Players.LocalPlayer.UserId = '1171396365'
 		game.Players.LocalPlayer.Character.Humanoid.Health = 0
 	end)
