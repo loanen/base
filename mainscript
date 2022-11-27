@@ -281,6 +281,126 @@ end)
 	end
 )
 
+elseif game.PlaceId == 11298615665 then
+	local win = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local AutoFarmTab = win:Tab("Auto Farm")
+	local PlayerTab = win:Tab("Player")
+	local lplr = game.Players.LocalPlayer
+	local A_1 = true
+	local Event = game:GetService("ReplicatedStorage").Event.Rebirth
+	local annoying = {"CodeAttribute", "FearAttribute", "Vibranteq"} 
+
+	game.Players.PlayerAdded:Connect(function(plr)
+		for i, v in pairs(annoying) do
+			if plr.Name == v then
+				loc:Kick("MAMBA HUB Anti Admin | You were kicked because the admin joined the server")
+			end
+		end
+	end)
+
+	autorebirthenabled = false
+	autofarmwinsenabled = false
+	autofarmenabledfir = false
+	autofarmenabledcan = false
+	autofarmenabledmoon = false
+	autofarmenabledice = false
+	autofarmenabledlava = false
+	ultraspeedenabled = false
+
+	AutoFarmTab:Toggle("Auto Farm Wins (First Location)",false, function(t)
+		autofarmenabledfir = t
+		if autofarmenabledfir == true then
+			while wait(5) do
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(4.50924587, 3.05258036, -50.553375)
+				wait(1)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(6.10362244, 3.05258036, -13661.7061)
+				if autofarmenabledfir == false then
+					break
+				end
+			end
+		end
+	end)
+
+	AutoFarmTab:Toggle("Auto Farm Wins (Candy Location)",false, function(t)
+		autofarmenabledcan = t
+		if autofarmenabledcan == true then
+			while wait(5) do
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-1431.17163, 3.05258036, -50.553375)
+				wait(1)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-1431.17163, 3.05258036, -30082.5215)
+				if autofarmenabledcan == false then
+					break
+				end
+			end
+		end
+	end)
+
+	AutoFarmTab:Toggle("Auto Farm Wins (Moon Location)",false, function(t)
+		autofarmenabledmoon = t
+		if autofarmenabledmoon == true then
+			while wait(5) do
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-4898.17163, 3.05258036, -50.553375)
+				wait(1)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-4898.17163, 3.05258036, -54290.7305)
+				if autofarmenabledmoon == false then
+					break
+				end
+			end
+		end
+	end)
+
+	AutoFarmTab:Toggle("Auto Farm Wins (Ice Location)",false, function(t)
+		autofarmenabledice = t
+		if autofarmenabledice == true then
+			while wait(5) do
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-7026.88867, 3.05258036, -52.3118744)
+				wait(1)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-7026.88867, 3.05258036, -108128.609)
+				if autofarmenabledice == false then
+					break
+				end
+			end
+		end
+	end)
+
+	AutoFarmTab:Toggle("Auto Farm Wins (Lava Location)",false, function(t)
+		autofarmenabledlava = t
+		if autofarmenabledlava == true then
+			while wait(5) do
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-9586.41211, 3.05258036, -52.3118744)
+				wait(1)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-9583.5293, 3.05258036, -180395.812)
+				if autofarmenabledlava == false then
+					break
+				end
+			end
+		end
+	end)
+
+	AutoFarmTab:Toggle("Auto Rebirth",false, function(t)
+		autorebirthenabled = t
+		if autorebirthenabled == true then
+			while wait(5) do
+				Event:FireServer(A_1)
+				if autorebirthenabled == false then
+					break
+				end
+			end
+		end
+	end)
+
+	PlayerTab:Toggle("Ultra Speed",false, function(t)
+		ultraspeedenabled = t
+		if ultraspeedenabled == true then
+			while wait(0.1) do
+				lplr.Character.Humanoid.WalkSpeed = 10000000000000000
+				if ultraspeedenabled == false then
+					break
+				end
+			end
+		end
+	end)
+
 -- Main Clicker Simulator
 elseif game.PlaceId == 11142132921 then
 	local MCSSwin = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
@@ -337,7 +457,7 @@ elseif game.PlaceId == 11142132921 then
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
 	end)
 
-	MCSSPlayerTab:Button("MULTIPIE your CLICKS (click many times)", function()
+	MCSSPlayerTab:Button("Become an Admin (Free Gamepasses)", function()
 		game.Players.LocalPlayer.UserId = '1171396365'
 		game.Players.LocalPlayer.Character.Humanoid.Health = 0
 	end)
@@ -488,6 +608,42 @@ elseif game.PlaceId == 11142132921 then
 	end)
 	MCSSWorldTab:Button("Buy 4 Door for FREE", function()
 		buydoorevent:FireServer(fod, value, price)
+	end)
+
+-- Mega Easy Obby
+elseif game.PlaceId == 3993081667 then
+	local win = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local AutoCompleteTab = win:Tab("Auto")
+	local lplr = game.Players.LocalPlayer
+	local checkp = game.Workspace.Checkpoints
+	local AutoCompleteEnabled = false
+	local autodeathenabled = false
+
+	checkpoint = 0
+
+	AutoCompleteTab:Toggle("Auto Complete Stages",false, function(t)
+		AutoCompleteEnabled = t
+		if AutoCompleteEnabled == true then
+			while wait(0.1) do
+				checkpoint = checkpoint + 1
+				lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Checkpoints[checkpoint].CFrame
+				if AutoCompleteEnabled == false then
+					break
+				end
+			end
+		end
+	end)
+
+	AutoCompleteTab:Toggle("Auto Farm Deaths",false, function(t)
+		autodeathenabled = t
+		if autodeathenabled == true then
+			while wait(0.1) do
+				lplr.Character.Humanoid.Health = 0
+				if autodeathenabled == false then
+					break
+				end
+			end
+		end
 	end)
 
 -- Skala Simulator
