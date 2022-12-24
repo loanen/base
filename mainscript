@@ -610,6 +610,24 @@ elseif game.PlaceId == 11142132921 then
 		buydoorevent:FireServer(fod, value, price)
 	end)
 
+	-- Самарский район РП
+elseif game.PlaceId == 8645635604 then
+	local win = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
+	local plrtab = win:Tab("Player")
+	local aftab = win:Tab("AutoFarm")
+	local uitab = win:Tab('UI')
+
+	plrtab:Slider("WalkSpeed",16,250,16, function(t)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+	end)
+	plrtab:Slider("JumpPower",50,200,50, function(t)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = t
+	end)
+
+	uitab:Textbox("Give Money (Fake)",true, function(t)
+		game.Players.LocalPlayer.Cash.Value = t
+	end)
+
 -- Mega Easy Obby
 elseif game.PlaceId == 3993081667 then
 	local win = lib:Window("MAMBA HUB",Color3.fromRGB(0, 140, 0), Enum.KeyCode.RightShift)
